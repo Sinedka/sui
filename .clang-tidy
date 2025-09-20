@@ -1,17 +1,16 @@
----
 # Основные включенные проверки
 Checks: >
+  bugprone-*,
   clang-analyzer-*,                 # Статический анализатор: утечки памяти, nullptr, двойное освобождение
-  clang-analyzer-security.*,        # Потенциальные уязвимости: буферы, строки, опасные функции
+  concurrency-*,
   cppcoreguidelines-*,              # Рекомендации по современному C++ (владение памятью, инициализация, массивы)
   performance-*,                    # Лишние копирования, неэффективные конструкции
-  bugprone-*,                        # Потенциальные логические ошибки
+  google-*
   hicpp-*,                           # Стандарты HICPP
   modernize-*,                       # Современные конструкции C++
   readability-*,                     # Стиль, читаемость
-  readability-identifier-naming      # Проверка имен переменных, функций, классов и констант
 
-WarningsAsErrors: '*'               # Все предупреждения превращаем в ошибки
+# WarningsAsErrors: '*'               # Все предупреждения превращаем в ошибки
 HeaderFilterRegex: '.*'             # Проверять все заголовочные файлы
 FormatStyle: file                   # Использовать .clang-format для форматирования
 
@@ -98,4 +97,3 @@ CheckOptions:
     value: 'true'                     # Некорректная инициализация в конструкторах копирования
   - key: bugprone-easily-swappable-parameters.WarnOnAll
     value: 'true'                     # Предупреждение о функциях с параметрами одного типа
-

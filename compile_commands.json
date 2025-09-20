@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/sinedka/sui/build",
+  "command": "/nix/store/95k9rsn1zsw1yvir8mj824ldhf90i4qw-gcc-wrapper-14.3.0/bin/g++   -std=gnu++17 -o CMakeFiles/hello.dir/src/main.cpp.o -c /home/sinedka/sui/src/main.cpp",
+  "file": "/home/sinedka/sui/src/main.cpp",
+  "output": "CMakeFiles/hello.dir/src/main.cpp.o"
+}
+]
