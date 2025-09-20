@@ -1,64 +1,101 @@
+---
 # Основные включенные проверки
 Checks: >
-  clang-analyzer-*,
-  cppcoreguidelines-*,
-  performance-*,
-  bugprone-*,
-  hicpp-*,
-  modernize-use-nullptr
+  clang-analyzer-*,                 # Статический анализатор: утечки памяти, nullptr, двойное освобождение
+  clang-analyzer-security.*,        # Потенциальные уязвимости: буферы, строки, опасные функции
+  cppcoreguidelines-*,              # Рекомендации по современному C++ (владение памятью, инициализация, массивы)
+  performance-*,                    # Лишние копирования, неэффективные конструкции
+  bugprone-*,                        # Потенциальные логические ошибки
+  hicpp-*,                           # Стандарты HICPP
+  modernize-*,                       # Современные конструкции C++
+  readability-*,                     # Стиль, читаемость
+  readability-identifier-naming      # Проверка имен переменных, функций, классов и констант
 
-# Превращаем все предупреждения в ошибки
-WarningsAsErrors: '*'
+WarningsAsErrors: '*'               # Все предупреждения превращаем в ошибки
+HeaderFilterRegex: '.*'             # Проверять все заголовочные файлы
+FormatStyle: file                   # Использовать .clang-format для форматирования
 
-# Проверяем все заголовочные файлы
-HeaderFilterRegex: '.*'
-
-# Форматирование кода использовать из .clang-format
-FormatStyle: file
-
-# Настройки отдельных проверок
 CheckOptions:
-  # cppcoreguidelines-owning-memory — проверка правильного владения памятью
+
+  # --- Управление памятью и ресурсы ---
   - key: cppcoreguidelines-owning-memory.IgnoreSmartPointers
-    value: 'false'
-
-  # cppcoreguidelines-no-malloc — предупреждение о malloc/free
+    value: 'false'                  # Проверять владение памятью, включая smart pointers
   - key: cppcoreguidelines-no-malloc.WarnOnMalloc
-    value: 'true'
-
-  # performance-unnecessary-value-param — лишние копии объектов
-  - key: performance-unnecessary-value-param.AllowedTypes
-    value: ''
-
-  # bugprone-use-after-move — использование после std::move
-  - key: bugprone-use-after-move.WarnOnPointer
-    value: 'true'
-
-  # bugprone-reserved-identifier — проверка использования запрещённых идентификаторов
-  - key: bugprone-reserved-identifier.Strict
-    value: 'true'
-
-  # hicpp-no-array-decay — проверка опасного преобразования массивов в указатели
-  - key: hicpp-no-array-decay.Strict
-    value: 'true'
-
-  # clang-analyzer-memory-leak — включить полное отслеживание утечек
+    value: 'true'                   # Предупреждать о malloc/free
   - key: clang-analyzer-memory-leak.DetectLeaks
-    value: 'true'
+    value: 'true'                   # Полное отслеживание утечек памяти
+  - key: clang-analyzer-cplusplus.NewDeleteLeaks
+    value: 'true'                   # Проверка утечек при new/delete
+  - key: clang-analyzer-cplusplus.SmartPtr
+    value: 'true'                   # Проверка корректного использования unique_ptr/shared_ptr
+  - key: bugprone-use-after-move.WarnOnPointer
+    value: 'true'                   # Ловим использование объектов после std::move
 
-  # clang-analyzer-core.NullDereference — ловим возможные обращения к nullptr
-  - key: clang-analyzer-core.NullDereference
-    value: 'true'
-
-  # cppcoreguidelines-pro-type-member-init — все поля должны быть инициализированы
+  # --- Проверки синтаксиса и безопасности ---
   - key: cppcoreguidelines-pro-type-member-init.WarnOnAllMembers
-    value: 'true'
-
-  # cppcoreguidelines-pro-bounds-array-to-pointer-decay — проверка выхода за границы массивов
+    value: 'true'                   # Все члены классов должны быть инициализированы
   - key: cppcoreguidelines-pro-bounds-array-to-pointer-decay.WarnOnAll
-    value: 'true'
+    value: 'true'                   # Проверка выхода за границы массивов
+  - key: clang-analyzer-core.NullDereference
+    value: 'true'                   # Проверка обращения к nullptr
+  - key: hicpp-no-array-decay.Strict
+    value: 'true'                   # Предупреждение о небезопасном преобразовании массивов в указатели
+  - key: bugprone-reserved-identifier.Strict
+    value: 'true'                   # Предупреждение о запрещённых идентификаторах
+  - key: cppcoreguidelines-pro-type-vararg.WarnOnVarArgs
+    value: 'true'                   # Предупреждение о varargs (...)
+  - key: cppcoreguidelines-pro-bounds-pointer-arithmetic.WarnOnAll
+    value: 'true'                   # Контроль опасной арифметики указателей
 
-  # modernize-use-nullptr — рекомендовать nullptr вместо NULL
+  # --- Производительность ---
+  - key: performance-unnecessary-value-param.AllowedTypes
+    value: ''                       # Ловим лишние копии объектов при передаче по значению
+  - key: performance-for-range-copy.WarnOnAllRanges
+    value: 'true'                   # Предупреждение о копировании объектов в range-based for
+  - key: performance-move-const-arg.WarnOnConst
+    value: 'true'                   # Рекомендует std::move для аргументов, больше не используемых
+  - key: performance-no-automatic-move.WarnOnAll
+    value: 'true'                   # Проверка неявного перемещения объектов
+
+  # --- Современный C++ ---
+  - key: modernize-avoid-c-arrays.WarnOnAll
+    value: 'true'                   # Замена C-массивов на std::array или std::vector
+  - key: modernize-use-emplace.WarnOnAll
+    value: 'true'                   # Использовать emplace вместо push_back/insert
+  - key: modernize-pass-by-value.WarnOnAll
+    value: 'true'                   # Передача по значению с последующим std::move
   - key: modernize-use-nullptr.NullMacros
-    value: 'NULL'
+    value: 'NULL'                    # Рекомендует nullptr вместо NULL
+  - key: modernize-use-auto.MinTypeNameLength
+    value: '0'                       # Рекомендует auto для всех типов
+  - key: modernize-use-trailing-return-type.MinTypeNameLength
+    value: '0'                       # Использовать trailing return type
+
+  # --- Читаемость и стиль ---
+  - key: readability-braces-around-statements.ShortStatementLines
+    value: '1'                       # Добавлять фигурные скобки вокруг однострочных блоков
+  - key: readability-magic-numbers.IgnoredValues
+    value: '0,1'                     # Игнорируем 0 и 1, остальное — предупреждение
+  - key: readability-else-after-return.WarnOnAll
+    value: 'true'                     # Упрощает ветвления после return
+  - key: readability-identifier-naming.VariableCase
+    value: 'camelCase'               # Переменные — camelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: 'camelCase'               # Функции — camelCase
+  - key: readability-identifier-naming.ClassCase
+    value: 'PascalCase'              # Классы — PascalCase
+  - key: readability-identifier-naming.ConstantCase
+    value: 'UPPER_CASE'              # Константы — UPPER_CASE
+  - key: readability-identifier-naming.EnumCase
+    value: 'PascalCase'              # Элементы enum — PascalCase
+  - key: readability-identifier-naming.PrivateMemberPrefix
+    value: 'm_'                      # Префикс для приватных членов класса
+
+  # --- Потенциальные баги ---
+  - key: bugprone-argument-comment.WarnOnAll
+    value: 'true'                     # Проверка комментариев при передаче аргументов
+  - key: bugprone-copy-constructor-init.WarnOnAll
+    value: 'true'                     # Некорректная инициализация в конструкторах копирования
+  - key: bugprone-easily-swappable-parameters.WarnOnAll
+    value: 'true'                     # Предупреждение о функциях с параметрами одного типа
 
