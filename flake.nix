@@ -2,7 +2,7 @@
   description = "AniParser Electron application";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -18,13 +18,10 @@
         default = pkgs.mkShell {
           buildInputs = with pkgs; [
             cmake
-            clang
             gdb
           ];
 
           shellHook = ''
-            SHELL=${pkgs.zsh}/bin/zsh
-            exec zsh
           '';
         };
       });

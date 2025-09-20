@@ -1,0 +1,64 @@
+# Основные включенные проверки
+Checks: >
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  performance-*,
+  bugprone-*,
+  hicpp-*,
+  modernize-use-nullptr
+
+# Превращаем все предупреждения в ошибки
+WarningsAsErrors: '*'
+
+# Проверяем все заголовочные файлы
+HeaderFilterRegex: '.*'
+
+# Форматирование кода использовать из .clang-format
+FormatStyle: file
+
+# Настройки отдельных проверок
+CheckOptions:
+  # cppcoreguidelines-owning-memory — проверка правильного владения памятью
+  - key: cppcoreguidelines-owning-memory.IgnoreSmartPointers
+    value: 'false'
+
+  # cppcoreguidelines-no-malloc — предупреждение о malloc/free
+  - key: cppcoreguidelines-no-malloc.WarnOnMalloc
+    value: 'true'
+
+  # performance-unnecessary-value-param — лишние копии объектов
+  - key: performance-unnecessary-value-param.AllowedTypes
+    value: ''
+
+  # bugprone-use-after-move — использование после std::move
+  - key: bugprone-use-after-move.WarnOnPointer
+    value: 'true'
+
+  # bugprone-reserved-identifier — проверка использования запрещённых идентификаторов
+  - key: bugprone-reserved-identifier.Strict
+    value: 'true'
+
+  # hicpp-no-array-decay — проверка опасного преобразования массивов в указатели
+  - key: hicpp-no-array-decay.Strict
+    value: 'true'
+
+  # clang-analyzer-memory-leak — включить полное отслеживание утечек
+  - key: clang-analyzer-memory-leak.DetectLeaks
+    value: 'true'
+
+  # clang-analyzer-core.NullDereference — ловим возможные обращения к nullptr
+  - key: clang-analyzer-core.NullDereference
+    value: 'true'
+
+  # cppcoreguidelines-pro-type-member-init — все поля должны быть инициализированы
+  - key: cppcoreguidelines-pro-type-member-init.WarnOnAllMembers
+    value: 'true'
+
+  # cppcoreguidelines-pro-bounds-array-to-pointer-decay — проверка выхода за границы массивов
+  - key: cppcoreguidelines-pro-bounds-array-to-pointer-decay.WarnOnAll
+    value: 'true'
+
+  # modernize-use-nullptr — рекомендовать nullptr вместо NULL
+  - key: modernize-use-nullptr.NullMacros
+    value: 'NULL'
+
