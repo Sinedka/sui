@@ -1,0 +1,7 @@
+{ onClick, onHower, children, color, text}:
+let
+
+in
+{
+   BaseObject
+}

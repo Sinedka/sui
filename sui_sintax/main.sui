@@ -1,0 +1,14 @@
+{BaseFunctions, console, ...}@inputs :
+let:
+  onWindowClose = console.out "Hello world";
+in:
+{
+  BaseObject = BaseFunctions.BaseObject {
+    style = 
+  };
+
+  Properties = {
+    OnWinClose = onWindowClose
+    
+  }
+}
